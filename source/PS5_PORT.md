@@ -24,6 +24,18 @@ Consequence: the PS5 has no GLES, so the fixed-function shim needs two backends:
 - Vulkan backend: for PS5, using one uber-shader (GLSL precompiled to SPIR-V) with the same uniforms.
 The legacy-GL emulation (matrix stacks, glBegin/glEnd batching, tex-env combine, fog, alpha test) is shared.
 
+## GLES2 shim status (src/glshim.h, src/glshim.cpp) - written, NOT yet compiled or run
+Enabled with `-DUSE_GLES2_SHIM` (`src/build_gles2_pc.sh` for a PC test, `src/build_ps5.sh` for the SDK).
+Implemented: matrix stacks, glBegin/glEnd batching, client arrays, QUADS->TRIANGLES, one uber shader with
+tex-env (modulate/replace/add/decal/blend/combine), 2 texture units, linear fog, alpha test, texture
+matrices, ES2 texture-upload fixes (internalformat, BGR), extension probes answered by `shim_getprocaddress`.
+Known gaps:
+- Display lists are disabled under the shim (static-model caching), so models draw in the slower path.
+- `glGetTexImage` (mapshot screenshots) and `glReadPixels(GL_DEPTH_COMPONENT)` (editor cursor depth) are not supported in ES2.
+- `glPolygonMode` wireframe, `glShadeModel`, hints, normals: dropped. Fog is linear only.
+- Uniforms are re-uploaded whenever any state changes (dirty flag); a per-uniform cache would cut GL calls.
+- Header interplay with `GL/glext.h` (typedef/enum redefinitions) is unverified until the first compile.
+
 ## Plan
 1. Renderer: replace immediate-mode GL with a small shim (batch into vertex arrays, draw with
    GLES2 shaders) behind one header (e.g. `glshim.h`) so desktop builds keep working.

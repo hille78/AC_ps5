@@ -27,7 +27,11 @@ PFNGLSTENCILFUNCSEPARATEATIPROC glStencilFuncSeparate_ = NULL;
 
 void *getprocaddress(const char *name)
 {
+#ifdef USE_GLES2_SHIM
+    return shim_getprocaddress(name);
+#else
     return SDL_GL_GetProcAddress(name);
+#endif
 }
 
 bool hasext(const char *exts, const char *ext)

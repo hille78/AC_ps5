@@ -544,7 +544,11 @@ struct vertmodel : model
                 return;
             }
 
+#ifdef USE_GLES2_SHIM
+            bool builddlist = false; // no display lists in GLES2
+#else
             bool builddlist = isstat && !owner->model->vertexlight && mdldlist;
+#endif
             if(builddlist) glNewList(statlist = glGenLists(1), GL_COMPILE);
             loopi(numdyndraws)
             {

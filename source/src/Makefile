@@ -66,6 +66,7 @@ endif
 
 CLIENT_OBJS= \
 	crypto.o \
+	glshim.o \
 	audiomanager.o \
 	autodownload.o \
 	client.o \

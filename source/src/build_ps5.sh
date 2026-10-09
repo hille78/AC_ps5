@@ -8,6 +8,6 @@ set -e
 SYSROOT="$PS5_PAYLOAD_SDK/target"
 exec make client \
     CXX="$PS5_PAYLOAD_SDK/bin/prospero-clang++" \
-    CLIENT_INCLUDES="-I. -Ibot -I../enet/include -idirafter ../include -I$SYSROOT/include -I$SYSROOT/include/SDL2 -DPS5" \
+    CLIENT_INCLUDES="-I. -Ibot -I../enet/include -idirafter ../include -I$SYSROOT/include -I$SYSROOT/include/SDL2 -DPS5 -DUSE_GLES2_SHIM" \
     CLIENT_LIBS="-L../enet/.libs -L$SYSROOT/lib -lenet -lSDL2 -lSDL2_image -lz -lopenal -lvorbisfile -lGLESv2 -lEGL" \
     "$@"

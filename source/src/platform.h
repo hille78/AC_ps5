@@ -50,7 +50,11 @@
     #define GL_GLEXT_LEGACY
     #define __glext_h__
     #define NO_SDL_GLEXT
-    #include <SDL_opengl.h>
+    #ifdef USE_GLES2_SHIM
+        #include "glshim.h"
+    #else
+        #include <SDL_opengl.h>
+    #endif
     #undef __glext_h__
 
     #include "GL/glext.h"
